@@ -1,0 +1,24 @@
+{
+  "name": "radio-player-component",
+  "version": "1.0.0",
+  "description": "A customizable Web Component radio player built with Lit + TypeScript",
+  "main": "dist/radio-player.js",
+  "types": "dist/types/radio-player.d.ts",
+  "author": "andrei45635",
+  "license": "MIT",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "preview": "vite preview",
+    "dev": "vite"
+  },
+  "dependencies": {
+    "lit": "^3.3.0"
+  },
+  "devDependencies": {
+    "typescript": "~5.7.2",
+    "vite": "^6.3.1"
+  }
+}

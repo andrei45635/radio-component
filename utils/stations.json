@@ -1,0 +1,52 @@
+[
+  {
+    "name": "DIGI FM",
+    "url": "https://edge126.rcs-rds.ro/digifm/digifm.mp3",
+    "logo": "https://www.digifm.ro/assets/digifm-logo.png"
+  },
+  {
+    "name": "Radio ZU",
+    "url": "https://live.romaniaradio.ro/zu-bucuresti",
+    "logo": "https://radiozu.ro/assets/img/logo-zu-new.png"
+  },
+  {
+    "name": "Kiss FM",
+    "url": "https://live.kissfm.ro/kissfm.aacp",
+    "logo": "https://kissfm.ro/wp-content/themes/kissfm/assets/images/kiss-logo.png"
+  },
+  {
+    "name": "Europa FM",
+    "url": "https://astreaming.edi.ro:8443/EuropaFM_aac",
+    "logo": "https://www.europafm.ro/wp-content/themes/europafm/images/logo-europafm.png"
+  },
+  {
+    "name": "Rock FM",
+    "url": "https://live.rockfm.ro/rockfm.aacp",
+    "logo": "https://rockfm.ro/assets/img/logo.png"
+  },
+  {
+    "name": "ProFM",
+    "url": "https://edge126.rcs-rds.ro/profm/profm.mp3",
+    "logo": "https://profm.ro/assets/img/logo-profm.png"
+  },
+  {
+    "name": "Dance FM",
+    "url": "https://edge126.rcs-rds.ro/dancefm/dancefm.mp3",
+    "logo": "https://dancefm.ro/assets/img/logo-dancefm.png"
+  },
+  {
+    "name": "Magic FM",
+    "url": "https://live.magicfm.ro/magicfm.aacp",
+    "logo": "https://magicfm.ro/assets/img/logo-magicfm.png"
+  },
+  {
+    "name": "Virgin Radio",
+    "url": "https://astreaming.edi.ro:8443/VirginRadio_aac",
+    "logo": "https://virginradio.ro/assets/img/logo-virginradio.png"
+  },
+  {
+    "name": "Radio Guerrilla",
+    "url": "https://live.guerrillaradio.ro:8443/guerrilla.aac",
+    "logo": "https://guerrilla.ro/assets/img/logo-guerrilla.png"
+  }
+]

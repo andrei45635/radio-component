@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Radio Player Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background-color: #f0f0f0;
+      transition: background-color 0.3s;
+    }
+
+    body.dark-mode {
+      background-color: #222;
+      color: #f0f0f0;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    body.dark-mode h1 {
+      color: #f0f0f0;
+    }
+
+    .player-container {
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+      border-radius: 15px;
+      background-color: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: background-color 0.3s, box-shadow 0.3s;
+    }
+
+    body.dark-mode .player-container {
+      background-color: #333;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+
+    .theme-selector {
+      margin: 20px auto;
+      text-align: center;
+    }
+
+    button {
+      padding: 8px 16px;
+      margin: 0 5px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+    }
+
+    .light-btn {
+      background-color: #f9f9f9;
+      color: #000;
+      border: 1px solid #ccc;
+    }
+
+    .dark-btn {
+      background-color: #121212;
+      color: #eee;
+    }
+
+    .neon-btn {
+      background-color: #0f0f0f;
+      color: #39ff14;
+      border: 1px solid #39ff14;
+      box-shadow: 0 0 5px #39ff14;
+    }
+
+    .cyberpunk-btn {
+      background-color: #1a1a2e;
+      color: #ff00c8;
+      border: 1px solid #ff00c8;
+      box-shadow: 0 0 5px #ff00c8;
+    }
+
+    .page-controls {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .toggle-dark-mode {
+      background-color: #333;
+      color: #fff;
+      padding: 8px 16px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    body.dark-mode .toggle-dark-mode {
+      background-color: #f0f0f0;
+      color: #333;
+    }
+
+    .debug-info {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f5f5f5;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-family: monospace;
+      font-size: 14px;
+      display: none;
+    }
+
+    body.dark-mode .debug-info {
+      background-color: #333;
+      border-color: #555;
+    }
+
+    .show-debug {
+      margin-left: 10px;
+      background-color: #007bff;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+<h1>Radio Player Demo</h1>
+
+<div class="theme-selector">
+  <button class="light-btn" onclick="changeTheme('light')">Light Theme</button>
+  <button class="dark-btn" onclick="changeTheme('dark')">Dark Theme</button>
+  <button class="neon-btn" onclick="changeTheme('neon')">Neon Theme</button>
+  <button class="cyberpunk-btn" onclick="changeTheme('cyberpunk')">Cyberpunk Theme</button>
+</div>
+
+<div class="player-container">
+  <radio-player theme="light"></radio-player>
+</div>
+
+<div class="page-controls">
+  <button class="toggle-dark-mode" onclick="toggleDarkMode()">Toggle Dark Mode</button>
+  <button class="show-debug" onclick="toggleDebug()">Show Debug Info</button>
+</div>
+
+<div id="debug-info" class="debug-info">
+  <div>Current theme: <span id="current-theme">light</span></div>
+  <div>Audio initialized: <span id="audio-initialized">unknown</span></div>
+  <div>Audio playing: <span id="audio-playing">unknown</span></div>
+  <div>Selected station: <span id="selected-station">unknown</span></div>
+</div>
+
+<script type="module" src="/dist/radio-player.mjs"></script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    console.log('DOM loaded, waiting for component...');
+    customElements.whenDefined('radio-player').then(() => {
+      console.log('Radio player component is ready!');
+      const player = document.querySelector('radio-player');
+      if (player) {
+        player.addEventListener('play', () => {
+          console.log('Event: Player started playing');
+          updateDebugInfo();
+        });
+
+        player.addEventListener('pause', () => {
+          console.log('Event: Player paused');
+          updateDebugInfo();
+        });
+
+        player.addEventListener('station-change', (e) => {
+          console.log('Event: Station changed to', e.detail.station.name);
+          updateDebugInfo();
+        });
+
+        updateDebugInfo();
+
+        console.log('Player initial theme:', player.theme);
+      }
+    });
+  });
+
+  function changeTheme(theme) {
+    const player = document.querySelector('radio-player');
+    if (player) {
+      console.log('Setting theme to:', theme);
+      player.theme = theme;
+      document.getElementById('current-theme').textContent = theme;
+    }
+  }
+  function toggleDarkMode() {
+    document.body.classList.toggle('dark-mode');
+  }
+
+  function toggleDebug() {
+    const debugInfo = document.getElementById('debug-info');
+    if (debugInfo.style.display === 'block') {
+      debugInfo.style.display = 'none';
+    } else {
+      debugInfo.style.display = 'block';
+      updateDebugInfo();
+    }
+  }
+  function updateDebugInfo() {
+    const player = document.querySelector('radio-player');
+    if (player) {
+      document.getElementById('current-theme').textContent = player.theme;
+      if (player.shadowRoot) {
+        const audioInitialized = player.shadowRoot.querySelector('.container') ? 'Yes' : 'No';
+        document.getElementById('audio-initialized').textContent = audioInitialized;
+
+        const playing = player.shadowRoot.querySelector('.pause-icon') ? 'Yes' : 'No';
+        document.getElementById('audio-playing').textContent = playing;
+
+        const stationName = player.shadowRoot.querySelector('h2')?.textContent || 'Unknown';
+        document.getElementById('selected-station').textContent = stationName;
+      }
+    }
+  }
+</script>
+</body>
+</html>
