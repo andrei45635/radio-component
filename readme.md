@@ -2,7 +2,7 @@
 
 A customizable, themable web component for streaming internet radio stations built with Lit and TypeScript.
 
-![Radio Player Screenshot](public/radio-player.png)
+![Radio Player Screenshot](public/radio_player2.png)
 
 ## Features
 

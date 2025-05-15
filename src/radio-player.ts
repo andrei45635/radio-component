@@ -276,17 +276,17 @@ export class RadioPlayer extends LitElement {
             this.audio.addEventListener('playing', () => {
                 this.loading = false;
                 this.audioError = null;
-                console.log('✅ Audio is playing');
+                console.log('Audio is playing');
             });
             this.audio.addEventListener('stalled', () => this.loading = true);
 
             this.audio.addEventListener('canplay', () => {
-                console.log('✅ Can play audio!');
+                console.log('Can play audio!');
                 this.loading = false;
             });
 
             this.audio.addEventListener('error', (e) => {
-                console.error('❌ Audio error:', this.audio?.error);
+                console.error('Audio error:', this.audio?.error);
                 this.audioError = this.audio?.error?.message || 'Error playing audio';
                 this.loading = false;
             });
@@ -348,7 +348,7 @@ export class RadioPlayer extends LitElement {
                     url: station.url_resolved,
                     logo: station.favicon
                 }));
-                console.log('✅ Loaded stations from API:', this.stations.length);
+                console.log('Loaded stations from API:', this.stations.length);
             } else {
                 throw new Error('No stations returned from API');
             }
@@ -359,7 +359,7 @@ export class RadioPlayer extends LitElement {
                 const localData = await localResponse.json();
                 if (Array.isArray(localData) && localData.length > 0) {
                     this.stations = localData;
-                    console.log('✅ Loaded stations from local fallback:', this.stations.length);
+                    console.log('Loaded stations from local fallback:', this.stations.length);
                 } else {
                     throw new Error('No stations in local fallback');
                 }
@@ -371,7 +371,7 @@ export class RadioPlayer extends LitElement {
                     { name: 'Europa FM', url: 'https://astreaming.edi.ro:8443/EuropaFM_aac' },
                     { name: 'Radio ZU', url: 'https://live.romaniaradio.ro/zu-bucuresti' }
                 ];
-                console.log('✅ Using hardcoded fallback stations');
+                console.log('Using hardcoded fallback stations');
             }
         }
 
@@ -381,7 +381,7 @@ export class RadioPlayer extends LitElement {
             if (this.audio && this.selectedStation) {
                 this.audio.crossOrigin = 'anonymous';
                 this.audio.src = this.selectedStation.url;
-                console.log('✅ Set initial station:', this.selectedStation.name);
+                console.log('Set initial station:', this.selectedStation.name);
             }
         }
     }
@@ -403,12 +403,12 @@ export class RadioPlayer extends LitElement {
                 this.audioError = null;
                 this.audio.play()
                     .then(() => {
-                        console.log('✅ Audio playback started');
+                        console.log('Audio playback started');
                         this.playing = true;
                         this.dispatchEvent(new CustomEvent('play'));
                     })
                     .catch((err) => {
-                        console.error('❌ Audio playback failed:', err);
+                        console.error('Audio playback failed:', err);
                         this.audioError = err.message || 'Failed to play audio';
                         this.playing = false;
                     });
@@ -551,7 +551,7 @@ export class RadioPlayer extends LitElement {
             urlInput.value = '';
             if (logoInput) logoInput.value = '';
 
-            console.log('✅ Added new station:', newStation.name);
+            console.log('Added new station:', newStation.name);
         } catch (err) {
             console.error('Error adding station:', err);
         }
@@ -595,6 +595,8 @@ export class RadioPlayer extends LitElement {
             analyser.connect(audioCtx.destination);
 
             analyser.fftSize = 64;
+            analyser.smoothingTimeConstant = 0.7;
+
             const bufferLength = analyser.frequencyBinCount;
             const dataArray = new Uint8Array(bufferLength);
 
@@ -606,7 +608,8 @@ export class RadioPlayer extends LitElement {
                 const barWidth = (canvas.width / bufferLength) * 1.5;
                 let x = 0;
                 for (let i = 0; i < bufferLength; ++i) {
-                    const barHeight = dataArray[i] / 2;
+                    const value = dataArray[i] / 255;
+                    const barHeight = value * canvas.height;
                     ctx.fillStyle = this.theme === 'neon' ? '#39ff14'
                         : this.theme === 'cyberpunk' ? '#ff00c8'
                             : this.theme === 'dark' ? '#ffffff'
@@ -616,7 +619,7 @@ export class RadioPlayer extends LitElement {
                 }
             };
             draw();
-            console.log('✅ Visualizer initialized');
+            console.log('Visualizer initialized');
         } catch (err) {
             console.error('Error setting up visualizer:', err);
         }
@@ -652,7 +655,7 @@ export class RadioPlayer extends LitElement {
                 ${this.audioError ? html`
                     <div class="error-message">${this.audioError}</div>` : ''}
 
-                <div class="track-info">Currently Playing: ${this.currentTrack}</div>
+                <!--div class="track-info">Currently Playing: ${this.currentTrack}</div-->
 
                 <div class="mute-button" @click=${this.toggleMute}>
                     ${this.muted
@@ -677,6 +680,8 @@ export class RadioPlayer extends LitElement {
                        value="${this.audio?.volume || 1}">
 
                 <canvas id="visualizer" width="300" height="60"></canvas>
+
+                <audio id="hiddenAudio" style="display:none;" crossorigin="anonymous"></audio>
 
                 <div class="manage-stations">
                     <h3>Manage Stations</h3>
